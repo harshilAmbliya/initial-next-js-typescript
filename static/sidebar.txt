@@ -1,0 +1,292 @@
+  {token && role === "user" && (
+        <div className="menu-part px-5  group-[.sidebar-mini]:px-3 transition-all duration-300 !py-0 lg:h-[calc(100%-150px)] h-[calc(100%-40px)] overflow-y-auto overflow-x-hidden scrollbar-w-thin">
+          <div className="nav-part-1 pb-4">
+            <ul>
+              {dashboardNavigation.slice(0, 8).map(
+                (
+                  {
+                    href,
+                    icon,
+                    link,
+                    childrenNavigation,
+                    hasChild,
+                  }: {
+                    href: any;
+                    icon: any;
+                    link: any;
+                    childrenNavigation: any;
+                    hasChild: any;
+                  },
+                  index: Number
+                ) => {
+                  return (
+                    <li
+                      key={`${index}`}
+                      className={`${pathname === href ? "  rounded-sm " : ""}`}
+                    >
+                      {childrenNavigation?.length !== 0 && !hasChild ? (
+                        <Link
+                          href={href}
+                          className={`py-4 px-5 group-[.sidebar-mini]:px-[19px]  block rounded-sm group ${
+                            (pathname.startsWith(href) &&
+                              !pathname.includes("Form")) ||
+                            (link === "Portfolio" &&
+                              pathname.includes("portfolio")) ||
+                            (link === "Allocation" &&
+                              pathname.includes("allocation"))
+                              ? "bg-themeV2/20 active"
+                              : ""
+                          }`}
+                        >
+                          <div className="flex justify-between items-center gap-4">
+                            <div className="flex items-center gap-4">
+                              <span>{icon}</span>
+                              <h5 className="text-sm font-500 text-black group-[.active]:font-bold group-[.active]:black group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                {link}
+                              </h5>
+                            </div>
+                            <div>
+                              {childrenNavigation ? (
+                                pathname.includes("form") ? (
+                                  <IconDownSide className="w-5 h-5 text-white group-[.active]:text-themeV2" />
+                                ) : (
+                                  <IconLeftSide className="w-5 h-5 text-white group-[.active]:text-themeV2" />
+                                )
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="">
+                          <button
+                            onClick={() =>
+                              handleNestedNavClick(link.toLowerCase())
+                            }
+                            className={`py-4 w-full px-5 pt-3 mb-1  group-[.sidebar-mini]:px-[19px] transition-all duration-300 block rounded-sm group hover:!bg-themeV2Dark/20 ${
+                              pathname.includes(href?.replace("/", ""))
+                                ? "!bg-themeV2/20 active  "
+                                : ""
+                            }`}
+                          >
+                            <div className="flex justify-between items-center gap-4 ">
+                              <div className="flex items-center gap-4">
+                                <span>{icon}</span>
+                                <h5 className="text-sm font-500 text-black   group-[.active]:font-bold group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                  {link?.split("-")?.join(" ")}
+                                </h5>
+                              </div>
+
+                              <div>
+                                <IconDownSide
+                                  className={`w-5 h-5 text-black group-[.active]:text-black  transition-all duration-200 ${
+                                    activeNestedNav === link.toLowerCase()
+                                      ? "rotate-180"
+                                      : ""
+                                  }`}
+                                />
+                              </div>
+                            </div>
+                          </button>
+
+                          {
+                            <div
+                              className={`${
+                                activeNestedNav === link.toLowerCase()
+                                  ? "transition-all duration-300 h-auto"
+                                  : "transition-all duration-300 h-0 overflow-hidden"
+                              }`}
+                            >
+                              <ul className="lg:m-0 ml-6">
+                                {childrenNavigation &&
+                                  childrenNavigation?.map(
+                                    (
+                                      {
+                                        href,
+                                        icon,
+                                        link,
+                                      }: {
+                                        href: any;
+                                        icon: any;
+                                        link: any;
+                                      },
+                                      index: Number
+                                    ) => {
+                                      return (
+                                        <li
+                                          key={`${index}`}
+                                          className={`hover:bg-themeV2Dark/20  px-5 text-black rounded-sm  ${
+                                            pathname === href
+                                              ? "active bg-white/80  font-bold"
+                                              : ""
+                                          }`}
+                                        >
+                                          <Link
+                                            href={href}
+                                            onClick={(e) => e.stopPropagation()}
+                                            className={`cursor-pointer py-2 px-2 group-[.sidebar-mini]:px-[19px]  block rounded-sm group ${
+                                              pathname === href ||
+                                              (link === "Asset" &&
+                                                pathname.includes("asset"))
+                                                ? "active"
+                                                : ""
+                                            } ${
+                                              pathname === href ||
+                                              (link === "Prices" &&
+                                                pathname.includes("prices"))
+                                                ? "active "
+                                                : ""
+                                            }`}
+                                          >
+                                            <div className="flex items-center gap-4">
+                                              <span>{icon}</span>
+                                              <h5 className="text-sm font-500 text-black  group-[.active]:text-gray-900  group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                                {link}
+                                              </h5>
+                                            </div>
+                                          </Link>
+                                        </li>
+                                      );
+                                    }
+                                  )}
+                              </ul>
+                            </div>
+                          }
+                        </div>
+                      )}
+                    </li>
+                  );
+                }
+              )}
+            </ul>
+          </div>
+          {dashboardNavigation?.length > 7 && <Divider />}
+          <div className="pt-4">
+            <ul>
+              {dashboardNavigation
+                .slice(8, 9)
+                .map(
+                  (
+                    { href, icon, link, childrenNavigation, hasChild } : {
+                      href: any;
+                      icon: any;
+                      link: any;
+                      childrenNavigation: any;
+                      hasChild: any;
+                    },
+                    index :Number
+                  ) => (
+                    <li key={`${index}`}>
+                      {childrenNavigation?.length && !hasChild ? (
+                        <Link
+                          href={href}
+                          className={`py-4 px-5 group-[.sidebar-mini]:px-[19px]  block rounded-sm group ${
+                            (pathname === href && !pathname.includes("form")) ||
+                            (link === "Portfolio" &&
+                              pathname.includes("portfolio")) ||
+                            (link === "Allocation" &&
+                              pathname.includes("allocation"))
+                              ? "bg-themeV2/20 active"
+                              : ""
+                          }`}
+                        >
+                          <div className="flex justify-between items-center gap-4">
+                            <div className="flex items-center gap-4">
+                              <span>{icon}</span>
+                              <h5 className="text-sm font-500 text-white group-[.active]:text-themeV2 group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                {link}
+                              </h5>
+                            </div>
+                            <div>
+                              {childrenNavigation ? (
+                                pathname.includes("form") ? (
+                                  <IconDownSide className="w-5 h-5 text-white group-[.active]:text-themeV2" />
+                                ) : (
+                                  <IconLeftSide className="w-5 h-5 text-white group-[.active]:text-themeV2" />
+                                )
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="">
+                          <button
+                            onClick={() =>
+                              handleNestedNavClick(link.toLowerCase())
+                            }
+                            className={`cursor-pointer py-4 mb-1 w-full px-5 group-[.sidebar-mini]:px-[19px] transition-all duration-300 block rounded-sm group ${
+                              pathname.includes("account")
+                                ? "!bg-themeV2/20 active"
+                                : ""
+                            }`}
+                          >
+                            <div className="flex justify-between items-center gap-4">
+                              <div className="flex items-center gap-4">
+                                <span>{icon}</span>
+                                <h5 className="text-sm font-500 text-white group-[.active]:text-themeV2 group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                  {link}
+                                </h5>
+                              </div>
+                              <div>
+                                <IconDownSide
+                                  className={`w-5 h-5 text-white group-[.active]:text-themeV2 transition-all duration-200 ${
+                                    activeNestedNav === link.toLowerCase()
+                                      ? "rotate-180"
+                                      : ""
+                                  }`}
+                                />
+                              </div>
+                            </div>
+                          </button>
+                          {
+                            <div
+                              className={`${
+                                activeNestedNav === link.toLowerCase()
+                                  ? "transition-all duration-300 h-auto"
+                                  : "transition-all duration-300 h-0 overflow-hidden"
+                              } cursor-pointer `}
+                            >
+                              <ul className="lg:ml-6">
+                                {childrenNavigation &&
+                                  childrenNavigation?.map(
+                                    ({ href, icon, link }:{
+                                      href: any;
+                                      icon: any;
+                                      link: any;
+                                    }, index :Number) => (
+                                      <li
+                                        key={`${index}`}
+                                        className="hover:bg-themeV2Dark/20 px-5 rounded-sm"
+                                      >
+                                        <Link
+                                          href={href}
+                                          onClick={(e) => e.stopPropagation()}
+                                          className={`cursor-pointer py-2 px-2 group-[.sidebar-mini]:px-[19px]  block rounded-sm group ${
+                                            pathname === href ? "active" : ""
+                                          }`}
+                                        >
+                                          <div className="flex items-center gap-4">
+                                            <span>{icon}</span>
+                                            <h5 className="text-sm font-500 text-white group-[.active]:text-themeV2 group-[.sidebar-mini]:opacity-0 group-[.sidebar-mini]:invisible opacity-100 visible transition-all duration-300">
+                                              {link}
+                                            </h5>
+                                          </div>
+                                        </Link>
+                                      </li>
+                                    )
+                                  )}
+                              </ul>
+                            </div>
+                          }
+                        </div>
+                      )}
+                    </li>
+                  )
+                )}
+            </ul>
+          </div>
+        </div>
+      )} 
